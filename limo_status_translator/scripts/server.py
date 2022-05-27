@@ -115,11 +115,6 @@ def handle_req(req):
         text = set_motion_msg(result.motion_mode)
         return GetLimoStatusResponse(text)
 
-    #rospy.loginfo("received %d, returning " + text + " ", req.get_status)
-    
-    resp = GetLimoStatusResponse()
-    #resp.get_status = text 
-    return resp
 
 
 if __name__ == '__main__':
