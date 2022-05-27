@@ -33,13 +33,16 @@ i = 1
 #### publishing to the 5 topics
 def publisher(x):
     while i < 6 :
+        if (i == 6):
+            i == 1
         pub = rospy.Publisher(topics[i], String, queue_size = 10)
         rate = rospy.Rate(1) # 1hz
         while not rospy.is_shutdown():
             str = "%s" + x
             rospy.loginfo(str)
             pub.publish(str)
-            rate.sleep()
+            rate.sleep()            
+        i += 1
 
 a = 0
 
