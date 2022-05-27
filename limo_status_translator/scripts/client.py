@@ -8,11 +8,17 @@ import rospy
 from limo_status_translator.srv import *
 
 def client(x):
-    rospy.wait_for_service('server')
-    try:
-        get_state = rospy.ServiceProxy('server', GetLimoStatus)
-        respl = server(x)
-        return respl
+    rospy.init_node("client_node")
+    rospy.wait_for_service("server")
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        try:
+            get_state = rospy.ServiceProxy('server', GetLimoStatus)
+            respl = get_state(x)
+            rospy.loginfo(respl)
+            rate.sleep()
+        except rospy.ServiceException as e:
+            print("Service call failed %s", e)
     
 #### requests details from translator node
 def request(x):
@@ -56,7 +62,7 @@ a = 0
 if __name__ == '__main__':
     while a < 5:
         try:
-            request(a)
-            publisher(msg)
+            client(a)
+            a += 1
         except rospy.ROSInterruptException:
             pass
