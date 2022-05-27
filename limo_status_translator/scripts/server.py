@@ -7,6 +7,7 @@ import rospy
 from limo_status_translator.msg import LimoStatus
 from std_msgs.msg import String
 
+
 result = LimoStatus()
 
 def callback(data):
@@ -15,16 +16,7 @@ def callback(data):
     result.battery_voltage = data.battery_voltage
     result.error_code = data.error_code
     result.motion_mode = data.motion_mode
-#   rospy.loginfo("vechicle state: " + str(result.vehicle_state))
-#    rospy.loginfo("control_mode:  " + str(result.control_mode))
-#    rospy.loginfo("battery_voltage: " + str(result.battery_voltage))
-#    rospy.loginfo("error_code: " + str(result.error_code))
-#    rospy.loginfo("motion_mode: " + str(result.motion_mode))
 
-def listener():
-    rospy.init_node('listener', anonymous=True)
-    rospy.Subscriber("limo_status", LimoStatus, callback)
-    rospy.spin()
 
 def set_vehicle_msg(vehicle_state):
     msg = ""
@@ -107,33 +99,34 @@ def set_motion_msg(motion_mode):
     return motion_msg
     
 def handle_req(req):
-        if (req == 0):
-            text = set_vehicle_msg(result.vehicle_state)
-            return GetLimoStatusResponse(text)
-        if (req == 1):
-            text = set_control_msg(result.control_mode)
-            return GetLimoStatusResponse(text)
-        if (req == 2):
-            text = "%f" % result.battery_voltage + "V"
-            return GetLimoStatusResponse(text)
-        if (req == 3):
-            text = set_error_msg(result.error_code)
-            return GetLimoStatusResponse(text)
-        if (req == 4):
-            text = set_motion_msg(result.motion_mode)
-            return GetLimoStatusResponse(text)
+    if (req.get_status == 0):
+        text = set_vehicle_msg(result.vehicle_state)
+        return GetLimoStatusResponse(text)
+    if (req.get_status == 1):
+        text = set_control_msg(result.control_mode)
+        return GetLimoStatusResponse(text)
+    if (req.get_status == 2):
+        text = "%f" % result.battery_voltage + "V"
+        return GetLimoStatusResponse(text)
+    if (req.get_status == 3):
+        text = set_error_msg(result.error_code)
+        return GetLimoStatusResponse(text)
+    if (req.get_status == 4):
+        text = set_motion_msg(result.motion_mode)
+        return GetLimoStatusResponse(text)
 
-def server():
-    #rospy.init_node('server')
-    rospy.Service("server", GetLimoStatus, handle_req)
-    print("GET_STATUS_VEHICLE_STATE = 0\n")
-    print("GET_STATUS_CONTROL_MODE = 1\n")
-    print("GET_STATUS_BATTERY_VOLTAGE = 1\n")
-    print("GET_STATUS_ERROR_CODE = 1\n")
-    print("GET_STATUS_MOTION_MODE = 1\n")
-    print("get_status: ")
-    rospy.spin()
+    #rospy.loginfo("received %d, returning " + text + " ", req.get_status)
+    
+    resp = GetLimoStatusResponse()
+    #resp.get_status = text 
+    return resp
+
 
 if __name__ == '__main__':
-    listener()
-    server()
+    rospy.init_node("server_node")
+    rospy.Subscriber("limo_status", LimoStatus, callback)
+    rospy.Service("service", GetLimoStatus, handle_req)
+    rospy.spin()
+
+    
+    
