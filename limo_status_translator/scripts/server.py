@@ -29,13 +29,13 @@ def set_vehicle_msg(vehicle_state):
 def set_control_msg(control_mode):
     msg = ""
     if (control_mode == 0):
-        msg = "Standby"
+        msg = "LIMO on Standby"
     elif (control_mode == 1):
-        msg = "Command Control"
+        msg = "LIMO on Command Control"
     elif (control_mode == 2):
-        msg = "App Control"
+        msg = "LIMO on App Control"
     else:
-        msg = "Remote Control"
+        msg = "LIMO on Remote Control"
     return msg
     
 def set_error_msg(error_code):
@@ -47,55 +47,55 @@ def set_error_msg(error_code):
         for i, c in enumerate(binary_code):
             if i == 0:
                 if c == '1': 
-                    error_msg = "Upper layer communication status"
+                    error_msg = "ERROR! Upper layer communication status"
             if i == 1:
                 if c =='1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "Driver failure"
+                    error_msg += "ERROR! Driver failure"
             if i == 3:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "(Motor No.4) Motor driver communication failure"
+                    error_msg += "ERROR! (Motor No.4) Motor driver communication failure"
             if i == 4:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "(Motor No.3) Motor driver communication failure"
+                    error_msg += "ERROR! (Motor No.3) Motor driver communication failure"
             if i == 5:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "(Motor No.2) Motor driver communication failure"
+                    error_msg += "ERROR! (Motor No.2) Motor driver communication failure"
             if i == 6:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "(Motor No.1) Motor driver communication failure"
+                    error_msg += "ERROR! (Motor No.1) Motor driver communication failure"
             if i == 7:
                 if c == '1':
-                    error_msg += "Remote control connection loss"
+                    error_msg += "ERROR! Remote control connection loss"
             if i == 8:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "Battery undervoltage warning (<9.5V)"
+                    error_msg += "ERROR! Battery undervoltage warning (<9.5V)"
             if i == 9:
                 if c == '1':
                     if error_msg != "":
                         error_msg += "\n"
-                    error_msg += "Battery undervoltage fault"
+                    error_msg += "ERROR! Battery undervoltage fault"
     return error_msg
 
 def set_motion_msg(motion_mode):
     motion_msg = ""
     if (motion_mode == 0):
-        motion_msg = "4-wheeled differential"
+        motion_msg = "motion mode is 4-wheeled differential"
     elif (motion_mode == 1):
-        motion_msg = "Ackermann"
+        motion_msg = "motion mode is Ackermann"
     else: 
-        motion_msg = "Mecanum"
+        motion_msg = "motion mode is Mecanum"
     return motion_msg
     
 def handle_req(req):
