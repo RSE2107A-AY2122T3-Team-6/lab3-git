@@ -1,32 +1,32 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-from http import server
 
 import sys
+import random
 import rospy
-from limo_status_translator.srv import *
+from limo_status_translator.srv import GetLimoStatus, GetLimoStatusRequest
 
-def client(x):
-    rospy.init_node("client_node")
-    rospy.wait_for_service("server")
-    rate = rospy.Rate(1)
+
+
+if __name__ == "__main__":
+    rospy.init_node('client')
+    service = rospy.ServiceProxy('service', GetLimoStatus)
+
+    r = rospy.Rate(1)
+
     while not rospy.is_shutdown():
-        try:
-            get_state = rospy.ServiceProxy('server', GetLimoStatus)
-            respl = get_state(x)
-            rospy.loginfo(respl)
-            rate.sleep()
-        except rospy.ServiceException as e:
-            print("Service call failed %s", e)
+        a = random.randint(0,4)
+
+        rospy.loginfo("sending [%d] " % a)
+
+        req = GetLimoStatusRequest()
+        req.get_status = a
+        rospy.wait_for_service('service')
+
+        resp = service(req)
+
+        rospy.loginfo("Recieved: " + resp.status_string)
+
+        r.sleep()
     
-
-a = 0
-
-if __name__ == '__main__':
-    while a < 5:
-        try:
-            client(a)
-            a += 1
-        except rospy.ROSInterruptException:
-            pass
