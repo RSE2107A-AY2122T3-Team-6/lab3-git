@@ -8,24 +8,21 @@ import rospy
 from std_msgs.msg import String
 from limo_status_translator.srv import GetLimoStatus, GetLimoStatusRequest
 
+topic = {1 : '/limo_status/vehicle_state', 2 : '/limo_status/control_mode', 
+3 : '/limo_status/battery_voltage', 4 : '/limo_status/error_code', 5 : '/limo_status/motion_mode'}
 
 def publish(msg):
-    pub1 = rospy.Publisher('/limo_status/vehicle_state', String, queue_size=50)
-    pub2 = rospy.Publisher('/limo_status/control_mode', String, queue_size=50)
-    pub3 = rospy.Publisher('/limo_status/battery_voltage', String, queue_size=50)
-    pub4 = rospy.Publisher('/limo_status/error_code', String, queue_size=50)
-    pub5 = rospy.Publisher('/limo_status/motion_mode', String, queue_size=50)
-    rate = rospy.Rate(1)
-    while not rospy.is_shutdown():
-        str = msg
-        rospy.loginfo(str)
-        pub1.publish(str)
-        pub2.publish(str)
-        pub3.publish(str)
-        pub4.publish(str)
-        pub5.publish(str)
-        rate.sleep()
-        return
+    num = 1
+    while num <= 5:
+        pub = rospy.Publisher(topic[num], String, queue_size=50)
+        num += 1
+        rate = rospy.Rate(1)
+        while not rospy.is_shutdown():
+            str = msg
+            rospy.loginfo(str)
+            pub.publish(str)
+            rate.sleep()
+            return
         
 
 if __name__ == "__main__":
@@ -44,7 +41,4 @@ if __name__ == "__main__":
         r.sleep()
         publish(resp.status_string)
     
-    
-
-
     
