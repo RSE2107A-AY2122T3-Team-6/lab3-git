@@ -118,7 +118,7 @@ def handle_req(req):
 
 
 if __name__ == '__main__':
-    rospy.init_node("server_node")
+    rospy.init_node("limo_status_translator_node")
     rospy.Subscriber("limo_status", LimoStatus, callback)
     rospy.Service("service", GetLimoStatus, handle_req)
     rospy.spin()
