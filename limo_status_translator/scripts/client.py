@@ -27,7 +27,7 @@ def publish(msg):
 
 if __name__ == "__main__":
 
-    rospy.init_node('client')
+    rospy.init_node('limo_status_client_node')
     service = rospy.ServiceProxy('service', GetLimoStatus)
     r = rospy.Rate(1)
     while not rospy.is_shutdown():
